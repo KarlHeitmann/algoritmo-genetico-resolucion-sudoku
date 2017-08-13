@@ -1,6 +1,7 @@
 require 'awesome_print'
 require_relative 'poblacion'
 MAX_GEN = 10
+TAMANIO_FILA = 9
 
 tablero = [
   [0,0,4,0,0,0,0,9,0],
@@ -15,6 +16,30 @@ tablero = [
 ]
 
 tablero_flat = tablero.flatten
+
+genes = []
+tablero.each do |f|
+  f.each do |e|
+    casillas = []
+    if e == 0
+      casillas << Casilla.new(0, false)
+    else
+      casillas << Casilla.new(e, true)
+    end
+  end
+  genes << Gen.new(casillas)
+end
+
+
+=begin
+def rellenarCasillas
+  cambios = []
+  entrada = []
+  TAMANIO_FILA.each do |i|
+
+  end
+end
+=end
 
 def evaluacion_poblacion
 
