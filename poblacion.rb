@@ -23,21 +23,26 @@ class Gen
 end
 
 class Individuo
-  def initialize(_genes, _adaptacion, _puntuacion, _puntuacion_acumulada, _elite)
-    @genes = []
-    _genes.each do |gen|
-      if gen.class == Gen
-        @genes << gen
-      elsif gen.class == Array
-        @genes << Gen.new(gen)
-      else
-        raise ErrorCrearGen
+  def initialize(params = {})
+    _genes = params.fetch(:genes, nil)
+    unless _genes.nil?
+      @genes = []
+      _genes.each do |gen|
+        if gen.class == Gen
+          @genes << gen
+        elsif gen.class == Array
+          @genes << Gen.new(gen)
+        else
+          raise ErrorCrearGen
+        end
       end
+    else
+      raise GenesInvalidos
     end
-    @adaptacion = _adaptacion
-    @puntuacion = _puntuacion
-    @puntuacion_acumulada = _puntuacion_acumulada
-    @elite = _elite
+    @adaptacion = params.fetch(:adaptacion, 0.0)
+    @puntuacion = params.fetch(:puntuacion, 0.0)
+    @puntuacion_acumulada = params.fetch(:puntuacion_acumulada, 0.0)
+    @elite = params.fetch(:elite, false)
   end
 end
 
@@ -70,8 +75,12 @@ if __FILE__ == $0
 
 
   puts "Genes"
-  indiv = Individuo.new([@gen_1, @gen_2, @gen_3], 2.3, 5.0, 3.0, false)
-  ap indiv
+  indiv1 = Individuo.new({genes: [@gen_1, @gen_2, @gen_3], adaptacion: 2.3, puntuacion: 5.0, puntuacion_acumulada: 3.0, elite: true})
+  indiv2 = Individuo.new({genes: [@gen_3, @gen_2, @gen_1]})
+  ap indiv1
+  ap "-----"
+  ap indiv2
+  #Individuo.new()
 
 end
 
