@@ -112,6 +112,39 @@ class Individuo
       end
     end
   end
+
+  def calcular_adaptacion_ponderada
+    #
+    # Calculo de columnas
+    #
+    # Restriccion de Sumas RS
+    rsColumna =         [45, 45, 45, 45, 45, 45, 45, 45, 45]
+    rpColumna =         [1, 1, 1, 1, 1, 1, 1, 1, 1]
+    reaColumna =        [(1..9).to_a,
+                         (1..9).to_a,
+                         (1..9).to_a,
+                         (1..9).to_a,
+                         (1..9).to_a,
+                         (1..9).to_a,
+                         (1..9).to_a,
+                         (1..9).to_a,
+                         (1..9).to_a
+    ]
+    9.times do |i|
+      9.times do |j|
+        valor_casilla = @genes[j].show_casilla(i).valor
+        rsColumna[i] -= valor_casilla
+        rpColumna[i] = rpColumna[i] * valor_casilla
+        reaColumna[i].delete_at(reaColumna[i].index(valor_casilla)) unless reaColumna[i].index(valor_casilla).nil?
+      end
+      rpColumna[i] = (362880 - rpColumna[i]).abs
+      rsColumna[i] = rsColumna[i].abs
+    end
+    ap rsColumna
+    ap [ 362880 ]
+    ap rpColumna
+    ap reaColumna
+  end
 end
 
 class Poblacion

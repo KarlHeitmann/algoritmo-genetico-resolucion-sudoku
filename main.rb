@@ -43,8 +43,9 @@ individuo.rellenar_casillas
 
 individuo.representar
 
-def evaluacion_poblacion
+individuo.calcular_adaptacion_ponderada
 
+def evaluacion_poblacion
 end
 
 def seleccion
