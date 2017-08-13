@@ -13,44 +13,6 @@ tablero = [
   [0,3,0,0,0,0,7,0,0],
 ]
 
-class Casilla
-  def initialize(_valor, _fija)
-    @valor = _valor #Valor numerico de casilla
-    @fija = _fija #Es una posicion inicial o no
-  end
-end
-
-class Gen
-  def initialize(_vector_casillas)
-    @vector_casillas = []
-    _vector_casillas.each do |casilla|
-      @vector_casillas << Casilla.new(casilla[:valor], casilla[:fija])
-    end
-  end
-end
-
-class Individuo
-  def initialize(_genes, _adaptacion, _puntuacion, _puntuacion_acumulada, _elite)
-    @genes = []
-    _genes.each do |gen|
-      @genes << Gen.new(gen)
-    end
-    @adaptacion = _adaptacion
-    @puntuacion = _puntuacion
-    @puntuacion_acumulada = _puntuacion_acumulada
-    @elite = _elite
-  end
-end
-
-class Poblacion
-  def initialize(_individuos)
-    @individuos = []
-    _individuos.each do |individuo|
-      @individuos << individuo
-    end
-  end
-end
-
 tablero_flat = tablero.flatten
 
 def evaluacion_poblacion
