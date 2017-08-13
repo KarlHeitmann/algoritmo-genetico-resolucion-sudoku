@@ -118,6 +118,18 @@ class Individuo
     # Calculo de columnas
     #
     # Restriccion de Sumas RS
+    rsCuad =         [45, 45, 45, 45, 45, 45, 45, 45, 45]
+    rpCuad =         [1, 1, 1, 1, 1, 1, 1, 1, 1]
+    reaCuad =        [(1..9).to_a,
+                         (1..9).to_a,
+                         (1..9).to_a,
+                         (1..9).to_a,
+                         (1..9).to_a,
+                         (1..9).to_a,
+                         (1..9).to_a,
+                         (1..9).to_a,
+                         (1..9).to_a
+    ]
     rsColumna =         [45, 45, 45, 45, 45, 45, 45, 45, 45]
     rpColumna =         [1, 1, 1, 1, 1, 1, 1, 1, 1]
     reaColumna =        [(1..9).to_a,
@@ -133,17 +145,47 @@ class Individuo
     9.times do |i|
       9.times do |j|
         valor_casilla = @genes[j].show_casilla(i).valor
+
         rsColumna[i] -= valor_casilla
         rpColumna[i] = rpColumna[i] * valor_casilla
         reaColumna[i].delete_at(reaColumna[i].index(valor_casilla)) unless reaColumna[i].index(valor_casilla).nil?
+
+        if (i < 3)
+          if (j < 3)
+            rsCuad[0] = rsCuad[0] - valor_casilla
+          elsif (j < 6)
+            rsCuad[1] = rsCuad[1] - valor_casilla
+          elsif (j < 9)
+            rsCuad[2] = rsCuad[2] - valor_casilla
+          end
+        elsif (i < 6)
+          if (j < 3)
+            rsCuad[3] = rsCuad[3] - valor_casilla
+          elsif (j < 6)
+            rsCuad[4] = rsCuad[4] - valor_casilla
+          elsif (j < 9)
+            rsCuad[5] = rsCuad[5] - valor_casilla
+          end
+        elsif (i < 9)
+          if (j < 3)
+            rsCuad[6] = rsCuad[6] - valor_casilla
+          elsif (j < 6)
+            rsCuad[7] = rsCuad[7] - valor_casilla
+          elsif (j < 9)
+            rsCuad[8] = rsCuad[8] - valor_casilla
+          end
+        end
+
       end
       rpColumna[i] = (362880 - rpColumna[i]).abs
       rsColumna[i] = rsColumna[i].abs
     end
     ap rsColumna
+    ap rsCuad
     ap [ 362880 ]
     ap rpColumna
     ap reaColumna
+    ap ""
   end
 end
 
