@@ -45,27 +45,34 @@ class Poblacion
   def initialize(_individuos)
     @individuos = []
     _individuos.each do |individuo|
-      @individuos << individuo
+      if individuo.class == Individuo
+        @individuos << individuo
+      else
+        raise ErrorCrearIndividuo
+      end
     end
   end
 end
 
-puts "Casilla"
-@cas_1 = Casilla.new(0, false)
-ap @cas_1
-@cas_2 = Casilla.new(0, false)
-ap @cas_2
-@cas_3 = Casilla.new(4, true)
-ap @cas_3
+if __FILE__ == $0
 
-@gen_1 = Gen.new([@cas_1, @cas_2, @cas_3])
-@gen_2 = Gen.new([@cas_3, @cas_2, @cas_1])
-@gen_3 = Gen.new([@cas_2, @cas_3, @cas_1])
+  puts "Casilla"
+  @cas_1 = Casilla.new(0, false)
+  ap @cas_1
+  @cas_2 = Casilla.new(0, false)
+  ap @cas_2
+  @cas_3 = Casilla.new(4, true)
+  ap @cas_3
+
+  @gen_1 = Gen.new([@cas_1, @cas_2, @cas_3])
+  @gen_2 = Gen.new([@cas_3, @cas_2, @cas_1])
+  @gen_3 = Gen.new([@cas_2, @cas_3, @cas_1])
 
 
-puts "Genes"
-indiv = Individuo.new([@gen_1, @gen_2, @gen_3], 2.3, 5.0, 3.0, false)
-ap indiv
+  puts "Genes"
+  indiv = Individuo.new([@gen_1, @gen_2, @gen_3], 2.3, 5.0, 3.0, false)
+  ap indiv
 
+end
 
 

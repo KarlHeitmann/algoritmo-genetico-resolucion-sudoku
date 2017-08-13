@@ -1,4 +1,5 @@
 require 'awesome_print'
+require_relative 'poblacion'
 MAX_GEN = 10
 
 tablero = [
