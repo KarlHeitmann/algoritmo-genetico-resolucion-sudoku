@@ -35,13 +35,13 @@ end
 
 individuo = Individuo.new({genes: genes})
 
+individuo.representar
 
 =begin
-def rellenarCasillas
-  cambios = []
+def rellenarCasillas(indiv)
+  cambios = [1,2,3,4,5,6,7,8,9]
   entrada = []
   TAMANIO_FILA.each do |i|
-
   end
 end
 =end

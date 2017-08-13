@@ -20,6 +20,19 @@ class Gen
       #@vector_casillas << Casilla.new(casilla.valor, casilla.fija)
     end
   end
+  def representar
+    i=1
+    fila="| "
+    @vector_casillas.each do |c|
+      if (i%3) == 0
+        fila += c.valor.to_s + " | "
+      else
+        fila += c.valor.to_s + " "
+      end
+      i+=1
+    end
+    puts fila
+  end
 end
 
 class Individuo
@@ -44,6 +57,22 @@ class Individuo
     @puntuacion_acumulada = params.fetch(:puntuacion_acumulada, 0.0)
     @elite = params.fetch(:elite, false)
   end
+  def representar
+    i = 1
+    puts  "_________________________"
+    @genes.each do |gen|
+      puts "|       |       |       |"
+      if (i%3) == 0
+        gen.representar
+        #puts "|       |       |       |"
+        puts  "|_______|_______|_______|"
+      else
+        gen.representar
+      end
+      i += 1
+    end
+  end
+  
 end
 
 class Poblacion
@@ -77,9 +106,14 @@ if __FILE__ == $0
   puts "Genes"
   indiv1 = Individuo.new({genes: [@gen_1, @gen_2, @gen_3], adaptacion: 2.3, puntuacion: 5.0, puntuacion_acumulada: 3.0, elite: true})
   indiv2 = Individuo.new({genes: [@gen_3, @gen_2, @gen_1]})
+
+  indiv1.representar
+
+=begin
   ap indiv1
   ap "-----"
   ap indiv2
+=end
   #Individuo.new()
 
 end
