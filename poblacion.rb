@@ -33,6 +33,27 @@ class Gen
     end
     puts fila
   end
+
+  def find_fixed_nums
+    results = []
+    i = 0
+    @vector_casillas.each do |c|
+      if c.fija
+        results << {valor: c.valor, indice: i}
+      end
+      i += 1
+    end
+    return results
+  end
+
+  def set_value(_val, _i)
+    @vector_casillas[_i] = Casilla.new(_val, false) unless @vector_casillas[_i].fija
+  end
+
+  def show_casilla(i)
+    return @vector_casillas[i]
+  end
+
 end
 
 class Individuo
@@ -73,6 +94,24 @@ class Individuo
     end
   end
   
+  def rellenar_casillas
+    entrada = []
+    @genes.each do |gen|
+      cambios = [1,2,3,4,5,6,7,8,9]
+      fijos = gen.find_fixed_nums
+      fijos.each do |n|
+        cambios.delete_at(cambios.index(n[:valor]))
+      end
+      i = 0
+      cambios.shuffle.each do |n|
+        while gen.show_casilla(i).fija do
+          i += 1
+        end
+        gen.set_value(n, i)
+        i += 1
+      end
+    end
+  end
 end
 
 class Poblacion
