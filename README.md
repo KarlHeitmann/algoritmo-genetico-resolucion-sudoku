@@ -83,5 +83,6 @@ colaboradores, pueden tener algún problema con su intérprete de Ruby. No
 obstante, en la documentación será importante escribir de forma correcta.
 
 La belleza está en la simplicidad, intentemos mantener este código simple, sin
-agregar muchas gemas.
+agregar muchas gemas. De esta forma, para los nuevos en Ruby será más fácil
+integrarse al proyecto.
 

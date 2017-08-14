@@ -1,7 +1,6 @@
-require 'awesome_print'
 require_relative 'poblacion'
 
-require 'byebug'
+#require 'byebug'
 
 MAX_GEN = 10
 TAMANIO_FILA = 9
@@ -61,16 +60,16 @@ def test
 
     individuo.representar
 
-    ap "Indiv #{i}: #{individuo.calcular_adaptacion_ponderada}"
+    puts "Indiv #{i}: #{individuo.calcular_adaptacion_ponderada}"
   end
 
   hijo = cruzar(individuos[0], individuos[1])
   hijo.representar
-  ap " hijo #{0}: #{hijo.calcular_adaptacion_ponderada}"
+  puts " hijo #{0}: #{hijo.calcular_adaptacion_ponderada}"
 
   hijo.mutar
   hijo.representar
-  ap " hijo #{0}: #{hijo.calcular_adaptacion_ponderada}"
+  puts " hijo #{0}: #{hijo.calcular_adaptacion_ponderada}"
 end
 
 # Comienzo del algoritmo
@@ -121,10 +120,10 @@ MAX_GEN.times do |i|
     ganador.representar
   end
 
-  #ap individuos.count
+  #puts individuos.count
 
-  ap "total puntuacion: " + total_puntuacion.to_s
-  ap "total acumulado:  " + total_acumulado.to_s
+  puts "total puntuacion: " + total_puntuacion.to_s
+  puts "total acumulado:  " + total_acumulado.to_s
   #
   # SELECCION
   #
@@ -142,7 +141,7 @@ MAX_GEN.times do |i|
     end
   end
 
-  #ap individuos.count
+  # puts individuos.count
 
   #
   # REPRODUCCION

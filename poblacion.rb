@@ -319,11 +319,8 @@ if __FILE__ == $0
 
   puts "Casilla"
   @cas_1 = Casilla.new(0, false)
-  ap @cas_1
   @cas_2 = Casilla.new(0, false)
-  ap @cas_2
   @cas_3 = Casilla.new(4, true)
-  ap @cas_3
 
   @gen_1 = Cromosoma.new({ vector_casillas: [@cas_1, @cas_2, @cas_3]})
   @gen_2 = Cromosoma.new({ vector_casillas: [@cas_3, @cas_2, @cas_1]})
@@ -335,14 +332,6 @@ if __FILE__ == $0
   indiv2 = Individuo.new({genes: [@gen_3, @gen_2, @gen_1]})
 
   indiv1.representar
-
-=begin
-  ap indiv1
-  ap "-----"
-  ap indiv2
-=end
-  #Individuo.new()
-
 end
 
 
