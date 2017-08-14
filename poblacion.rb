@@ -3,6 +3,13 @@ require 'awesome_print'
 PUNTO_DE_CRUCE = 4
 PROBABILIDAD_MUTACION = 0.8
 
+def colorize(text, color_code)
+  "\e[#{color_code}m#{text}\e[0m"
+end
+
+def red(text); colorize(text, 31); end
+def green(text); colorize(text, 32); end
+
 class Casilla
   attr_accessor :valor, :fija
   def initialize(_valor, _fija)
@@ -41,10 +48,18 @@ class Cromosoma
     i=1
     fila="| "
     @genes.each do |c|
-      if (i%3) == 0
-        fila += c.valor.to_s + " | "
+      if c.fija
+        if (i%3) == 0
+          fila += green(c.valor.to_s) + " | "
+        else
+          fila += green(c.valor.to_s) + " "
+        end
       else
-        fila += c.valor.to_s + " "
+        if (i%3) == 0
+          fila += c.valor.to_s + " | "
+        else
+          fila += c.valor.to_s + " "
+        end
       end
       i+=1
     end
