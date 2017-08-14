@@ -202,16 +202,6 @@ class Individuo
       rsCuad[i] = rsCuad[i].abs
       rpCuad[i] = (362880 - rpCuad[i]).abs
     end
-=begin
-    ap rsColumna
-    ap rsCuad
-    ap [ 362880 ]
-    ap rpColumna
-    ap rpCuad
-=end
-    #ap reaColumna
-    ap reaCuad
-    ap ""
   end
 end
 
