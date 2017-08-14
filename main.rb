@@ -5,6 +5,7 @@ require 'byebug'
 
 MAX_GEN = 10
 TAMANIO_FILA = 9
+POBLACION = 2
 
 tablero = [
   [0,0,4,0,0,0,0,9,0],
@@ -20,28 +21,46 @@ tablero = [
 
 tablero_flat = tablero.flatten
 
-genes = []
-tablero.each do |f|
-  casillas = []
-  f.each do |e|
-    if e == 0
-      casillas << Casilla.new(0, false)
-    else
-      casillas << Casilla.new(e, true)
-    end
-  end
-  genes << Gen.new(casillas)
+
+def cruzar(papa, mama)
+  genes_papa = papa.get_genotipo
+  genes_mama = mama.get_genotipo
+
+  return Individuo.new({ papa: genes_papa, mama: genes_mama})
 end
 
-individuo = Individuo.new({genes: genes})
+individuos =  []
+POBLACION.times do |i|
+  genes = []
+  tablero.each do |f|
+    casillas = []
+    f.each do |e|
+      if e == 0
+        casillas << Casilla.new(0, false)
+      else
+        casillas << Casilla.new(e, true)
+      end
+    end
+    genes << Gen.new({ vector_casillas: casillas })
+  end
+  individuos << Individuo.new({genes: genes})
+end
 
-individuo.representar
+i=0
+individuos.each do |individuo|
+  individuo.representar
 
-individuo.rellenar_casillas
+  individuo.rellenar_casillas
 
-individuo.representar
+  individuo.representar
 
-ap individuo.calcular_adaptacion_ponderada
+  ap "Indiv #{i}: #{individuo.calcular_adaptacion_ponderada}"
+end
+
+hijo = cruzar(individuos[0], individuos[1])
+hijo.representar
+ap " hijo #{0}: #{hijo.calcular_adaptacion_ponderada}"
+
 
 
 def evaluacion_poblacion

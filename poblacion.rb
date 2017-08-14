@@ -1,5 +1,7 @@
 require 'awesome_print'
 
+PUNTO_DE_CRUCE = 4
+
 class Casilla
   attr_accessor :valor, :fija
   def initialize(_valor, _fija)
@@ -9,17 +11,31 @@ class Casilla
 end
 
 class Gen
-  def initialize(_vector_casillas)
-    @vector_casillas = []
-    _vector_casillas.each do |casilla|
-      if casilla.class == Casilla
-        @vector_casillas << casilla
-      else
-        raise ErrorCrearCasilla
+  def initialize(params = {})
+    if params.has_key? :vector_casillas
+      @vector_casillas = []
+      params[:vector_casillas].each do |casilla|
+        if casilla.class == Casilla
+          @vector_casillas << casilla
+        else
+          raise ErrorCrearCasilla
+        end
+        #@vector_casillas << Casilla.new(casilla.valor, casilla.fija)
       end
-      #@vector_casillas << Casilla.new(casilla.valor, casilla.fija)
+    elsif (params.has_key?(:papa) && params.has_key?(:mama))
+      @vector_casillas = []
+      9.times do |i|
+        if i < PUNTO_DE_CRUCE
+          @vector_casillas << Casilla.new(params[:papa].show_casilla(i).valor, params[:papa].show_casilla(i).fija)
+        else
+          @vector_casillas << Casilla.new(params[:mama].show_casilla(i).valor, params[:mama].show_casilla(i).fija)
+        end
+      end
+    else
+      raise ErrorCrearGen
     end
   end
+
   def representar
     i=1
     fila="| "
@@ -58,17 +74,21 @@ end
 
 class Individuo
   def initialize(params = {})
-    _genes = params.fetch(:genes, nil)
-    unless _genes.nil?
+    if params.has_key? :genes
       @genes = []
-      _genes.each do |gen|
+      params[:genes].each do |gen|
         if gen.class == Gen
           @genes << gen
         elsif gen.class == Array
-          @genes << Gen.new(gen)
+          @genes << Gen.new({ vector_casillas: gen})
         else
           raise ErrorCrearGen
         end
+      end
+    elsif (params.has_key?(:papa) && params.has_key?(:mama))
+      @genes = []
+      9.times do |i|
+        @genes << Gen.new({papa: params[:papa][i], mama: params[:mama][i]})
       end
     else
       raise GenesInvalidos
@@ -78,6 +98,7 @@ class Individuo
     @puntuacion_acumulada = params.fetch(:puntuacion_acumulada, 0.0)
     @elite = params.fetch(:elite, false)
   end
+
   def representar
     i = 1
     puts  "_________________________"
@@ -93,7 +114,7 @@ class Individuo
       i += 1
     end
   end
-  
+
   def rellenar_casillas
     entrada = []
     @genes.each do |gen|
@@ -111,6 +132,10 @@ class Individuo
         i += 1
       end
     end
+  end
+
+  def get_genotipo
+    return @genes
   end
 
   def calcular_adaptacion_ponderada
@@ -237,9 +262,9 @@ if __FILE__ == $0
   @cas_3 = Casilla.new(4, true)
   ap @cas_3
 
-  @gen_1 = Gen.new([@cas_1, @cas_2, @cas_3])
-  @gen_2 = Gen.new([@cas_3, @cas_2, @cas_1])
-  @gen_3 = Gen.new([@cas_2, @cas_3, @cas_1])
+  @gen_1 = Gen.new({ vector_casillas: [@cas_1, @cas_2, @cas_3]})
+  @gen_2 = Gen.new({ vector_casillas: [@cas_3, @cas_2, @cas_1]})
+  @gen_3 = Gen.new({ vector_casillas: [@cas_2, @cas_3, @cas_1]})
 
 
   puts "Genes"
