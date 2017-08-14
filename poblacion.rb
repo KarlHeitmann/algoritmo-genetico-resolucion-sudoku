@@ -202,6 +202,15 @@ class Individuo
       rsCuad[i] = rsCuad[i].abs
       rpCuad[i] = (362880 - rpCuad[i]).abs
     end
+    rea = 0
+    9.times do |i|
+      rea += reaCuad[i].inject(:+) unless reaCuad[i].empty?
+      rea += reaColumna[i].inject(:+) unless reaColumna[i].empty?
+    end
+    rs = rsCuad.inject(:+) + rsColumna.inject(:+)
+    rp = rpCuad.inject(:+) + rpColumna.inject(:+)
+
+    return (5*rs) + rp + (20*rea)
   end
 end
 

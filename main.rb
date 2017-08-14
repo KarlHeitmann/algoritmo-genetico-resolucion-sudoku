@@ -37,13 +37,12 @@ individuo = Individuo.new({genes: genes})
 
 individuo.representar
 
-ap ""
-
 individuo.rellenar_casillas
 
 individuo.representar
 
-individuo.calcular_adaptacion_ponderada
+ap individuo.calcular_adaptacion_ponderada
+
 
 def evaluacion_poblacion
 end
