@@ -11,7 +11,7 @@ class Casilla
   end
 end
 
-class Genotipo
+class Cromosoma
   def initialize(params = {})
     if params.has_key? :vector_casillas
       @vector_casillas = []
@@ -33,7 +33,7 @@ class Genotipo
         end
       end
     else
-      raise ErrorCrearGenotipo
+      raise ErrorCrearCromosoma
     end
   end
 
@@ -81,20 +81,20 @@ end
 class Individuo
   def initialize(params = {})
     if params.has_key? :genes
-      @genes = []
+      @genotipo = []
       params[:genes].each do |gen|
-        if gen.class == Genotipo
-          @genes << gen
+        if gen.class == Cromosoma
+          @genotipo << gen
         elsif gen.class == Array
-          @genes << Genotipo.new({ vector_casillas: gen})
+          @genotipo << Cromosoma.new({ vector_casillas: gen})
         else
-          raise ErrorCrearGenotipo
+          raise ErrorCrearCromosoma
         end
       end
     elsif (params.has_key?(:papa) && params.has_key?(:mama))
-      @genes = []
+      @genotipo = []
       9.times do |i|
-        @genes << Genotipo.new({papa: params[:papa][i], mama: params[:mama][i]})
+        @genotipo << Cromosoma.new({papa: params[:papa][i], mama: params[:mama][i]})
       end
     else
       raise GenesInvalidos
@@ -108,7 +108,7 @@ class Individuo
   def representar
     i = 1
     puts  "_________________________"
-    @genes.each do |gen|
+    @genotipo.each do |gen|
       puts "|       |       |       |"
       if (i%3) == 0
         gen.representar
@@ -123,7 +123,7 @@ class Individuo
 
   def rellenar_casillas
     entrada = []
-    @genes.each do |gen|
+    @genotipo.each do |gen|
       cambios = [1,2,3,4,5,6,7,8,9]
       fijos = gen.find_fixed_nums
       fijos.each do |n|
@@ -141,7 +141,7 @@ class Individuo
   end
 
   def get_genotipo
-    return @genes
+    return @genotipo
   end
 
   def mutar
@@ -154,16 +154,16 @@ class Individuo
       k2 = true
       until k1==false
         i1 = rand(0..8)
-        k1 = @genes[cromosoma][i1].fija
-        v1 = @genes[cromosoma][i1].valor
+        k1 = @genotipo[cromosoma][i1].fija
+        v1 = @genotipo[cromosoma][i1].valor
       end
       until k2==false
         i2 = rand(0..8)
-        k2 = @genes[cromosoma][i2].fija
-        v2 = @genes[cromosoma][i2].valor
+        k2 = @genotipo[cromosoma][i2].fija
+        v2 = @genotipo[cromosoma][i2].valor
       end
-      @genes[cromosoma].set_value(v1, i2)
-      @genes[cromosoma].set_value(v2, i1)
+      @genotipo[cromosoma].set_value(v1, i2)
+      @genotipo[cromosoma].set_value(v2, i1)
       #ap "mutacion cromosoma #{cromosoma}, posicion (#{i1}, #{i2})"
     end
   end
@@ -199,7 +199,7 @@ class Individuo
     ]
     9.times do |i|
       9.times do |j|
-        valor_casilla = @genes[j][i].valor
+        valor_casilla = @genotipo[j][i].valor
 
         rsColumna[i] -= valor_casilla
         rpColumna[i] = rpColumna[i] * valor_casilla
@@ -292,9 +292,9 @@ if __FILE__ == $0
   @cas_3 = Casilla.new(4, true)
   ap @cas_3
 
-  @gen_1 = Genotipo.new({ vector_casillas: [@cas_1, @cas_2, @cas_3]})
-  @gen_2 = Genotipo.new({ vector_casillas: [@cas_3, @cas_2, @cas_1]})
-  @gen_3 = Genotipo.new({ vector_casillas: [@cas_2, @cas_3, @cas_1]})
+  @gen_1 = Cromosoma.new({ vector_casillas: [@cas_1, @cas_2, @cas_3]})
+  @gen_2 = Cromosoma.new({ vector_casillas: [@cas_3, @cas_2, @cas_1]})
+  @gen_3 = Cromosoma.new({ vector_casillas: [@cas_2, @cas_3, @cas_1]})
 
 
   puts "Genes"
