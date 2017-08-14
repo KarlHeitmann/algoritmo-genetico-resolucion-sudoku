@@ -180,6 +180,9 @@ class Individuo
       rpColumna[i] = (362880 - rpColumna[i]).abs
       rsColumna[i] = rsColumna[i].abs
     end
+    9.times do |i|
+      rsCuad[i] = rsCuad[i].abs
+    end
     ap rsColumna
     ap rsCuad
     ap [ 362880 ]
