@@ -12,13 +12,16 @@ def green(text); colorize(text, 32); end
 
 class Casilla
   attr_accessor :valor, :fija
+
   def initialize(_valor, _fija)
     @valor = _valor #Valor numerico de casilla
     @fija = _fija #Es una posicion inicial o no
   end
+
 end
 
 class Cromosoma
+
   def initialize(params = {})
     if params.has_key? :vector_casillas
       @genes = []
@@ -94,6 +97,7 @@ class Cromosoma
 end
 
 class Individuo
+  attr_reader :adaptacion, :puntuacion, :puntuacion_acumulada
   def initialize(params = {})
     if params.has_key? :genes
       @genotipo = []
@@ -280,8 +284,21 @@ class Individuo
     rs = rsCuad.inject(:+) + rsColumna.inject(:+)
     rp = rpCuad.inject(:+) + rpColumna.inject(:+)
 
-    return (5*rs) + rp + (20*rea)
+    @adaptacion = ((5*rs) + rp + (20*rea)).to_f
+    #@adaptacion = (@adaptacion / 100000).to_i
+    #ap @adaptacion
+    return @adaptacion
   end
+
+  def setear_puntuacion(total)
+    @puntuacion = (@adaptacion.to_f/total)
+  end
+
+  def setear_puntuacion_acumulada(cuenta)
+    @puntuacion_acumulada = cuenta + @puntuacion
+    return @puntuacion_acumulada
+  end
+
 end
 
 class Poblacion

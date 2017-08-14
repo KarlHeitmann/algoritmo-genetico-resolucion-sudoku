@@ -5,9 +5,11 @@ require 'byebug'
 
 MAX_GEN = 10
 TAMANIO_FILA = 9
-POBLACION = 2
+POBLACION = 10
+ELIMINAR = 2
 
-tablero = [
+
+TABLERO = [
   [0,0,4,0,0,0,0,9,0],
   [7,0,0,0,6,0,0,0,5],
   [0,9,0,5,4,1,8,7,2],
@@ -19,7 +21,7 @@ tablero = [
   [0,3,0,0,0,0,7,0,0]
 ]
 
-tablero_flat = tablero.flatten
+tablero_flat = TABLERO.flatten
 
 
 def cruzar(papa, mama)
@@ -29,68 +31,173 @@ def cruzar(papa, mama)
   return Individuo.new({ papa: genes_papa, mama: genes_mama})
 end
 
-
-def mutacion
+def poblacion_inicial(tablero)
+  individuos =  []
+  POBLACION.times do |i|
+    genes = []
+    tablero.each do |f|
+      casillas = []
+      f.each do |e|
+        if e == 0
+          casillas << Casilla.new(0, false)
+        else
+          casillas << Casilla.new(e, true)
+        end
+      end
+      genes << Cromosoma.new({ vector_casillas: casillas })
+    end
+    individuos << Individuo.new({genes: genes})
+  end
+  return individuos
 end
 
-individuos =  []
-POBLACION.times do |i|
-  genes = []
-  tablero.each do |f|
-    casillas = []
-    f.each do |e|
-      if e == 0
-        casillas << Casilla.new(0, false)
-      else
-        casillas << Casilla.new(e, true)
+def test
+  individuos = poblacion_inicial TABLERO
+  i=0
+  individuos.each do |individuo|
+    individuo.representar
+
+    individuo.rellenar_casillas
+
+    individuo.representar
+
+    ap "Indiv #{i}: #{individuo.calcular_adaptacion_ponderada}"
+  end
+
+  hijo = cruzar(individuos[0], individuos[1])
+  hijo.representar
+  ap " hijo #{0}: #{hijo.calcular_adaptacion_ponderada}"
+
+  hijo.mutar
+  hijo.representar
+  ap " hijo #{0}: #{hijo.calcular_adaptacion_ponderada}"
+end
+
+# Comienzo del algoritmo
+#
+# Se genera la poblacion inicial, a partir de los datos del tablero se proponen
+# soluciones aleatorias, indicando cuales son las casillas fijas.
+#
+
+individuos = poblacion_inicial TABLERO
+individuos.each do |indiv|
+  indiv.rellenar_casillas
+end
+
+#
+# Aqui comienzan las generaciones
+#
+MAX_GEN.times do |i|
+  #
+  # EVALUACION
+  #
+  # Se evaluan los individuos de esta generacion
+  #
+  total_puntuacion = 0.0
+  total_acumulado  = 0.0
+
+  individuos.each do |indiv|
+    total_puntuacion += indiv.calcular_adaptacion_ponderada.to_f
+  end
+  individuos.each do |indiv|
+    indiv.setear_puntuacion total_puntuacion
+    total_acumulado = indiv.setear_puntuacion_acumulada total_acumulado
+  end
+
+  if i == 0
+    puts "Tablero inicial, los ceros representan las casillas vacias"
+    individuos.first.representar
+    record = Float::INFINITY
+    ganador = nil
+    individuos.each do |indiv|
+      if indiv.adaptacion < record
+        record = indiv.adaptacion
+        ganador = indiv
       end
     end
-    genes << Cromosoma.new({ vector_casillas: casillas })
+
+    puts ""
+    puts "Mejor adaptacion inicial: #{record}"
+    ganador.representar
   end
-  individuos << Individuo.new({genes: genes})
+
+  #ap individuos.count
+
+  ap "total puntuacion: " + total_puntuacion.to_s
+  ap "total acumulado:  " + total_acumulado.to_s
+  #
+  # SELECCION
+  #
+  # Se selecciona por el metodo de la ruleta la cantidad ELIMINAR de individuos
+  # de la poblacion. Son los que tienen mayor puntaje, ya que este problema es
+  # de minimizacion.
+  #
+  # TODO: en la seleccion no hay un filtro realice un nuevo soteo si es que el
+  # se repite el individuo a eliminar
+
+  ELIMINAR.times do |i|
+    sorteo = rand
+    individuos.delete_if do |indiv|
+      (sorteo > (indiv.puntuacion_acumulada - indiv.puntuacion) and (sorteo < indiv.puntuacion_acumulada))
+    end
+  end
+
+  #ap individuos.count
+
+  #
+  # REPRODUCCION
+  #
+  # Se utiliza la funcion cruzar definida en este archivo para seleccionar
+  # aleatoriamente dos individuos sobre los que generar descendencia.
+  #
+
+  ELIMINAR.times do |i|
+    papa = rand(0...individuos.count)
+    mama = rand(0...individuos.count)
+    while (mama == papa) do
+      mama = rand(0..individuos.count)
+    end
+    individuos << cruzar(individuos[papa], individuos[mama])
+  end
+
+  #
+  # MUTACION
+  #
+  # Por ultimo, se recorre toda la poblacion y se invoca el metodo mutar de cada
+  # individuo. Con una baja probabiliddad, el individuo mutara uno de sus genes
+  #
+
+  individuos.each do |indiv|
+    indiv.mutar
+  end
 end
 
-i=0
-individuos.each do |individuo|
-  individuo.representar
+#
+# EVALUACION FINAL
+#
+# Se evaluan los individuos de la ultima generacion
+#
+total_puntuacion = 0.0
+total_acumulado  = 0.0
 
-  individuo.rellenar_casillas
-
-  individuo.representar
-
-  ap "Indiv #{i}: #{individuo.calcular_adaptacion_ponderada}"
+individuos.each do |indiv|
+  total_puntuacion += indiv.calcular_adaptacion_ponderada.to_f
+end
+individuos.each do |indiv|
+  indiv.setear_puntuacion total_puntuacion
+  total_acumulado = indiv.setear_puntuacion_acumulada total_acumulado
 end
 
-hijo = cruzar(individuos[0], individuos[1])
-hijo.representar
-ap " hijo #{0}: #{hijo.calcular_adaptacion_ponderada}"
 
-hijo.mutar
-hijo.representar
-ap " hijo #{0}: #{hijo.calcular_adaptacion_ponderada}"
-
-
-
-def evaluacion_poblacion
+record = Float::INFINITY
+ganador = nil
+individuos.each do |indiv|
+  if indiv.adaptacion < record
+    record = indiv.adaptacion 
+    ganador = indiv
+  end
 end
-
-def seleccion
-end
-
-def reproduccion
-end
-
-MAX_GEN.times do |i|
-  #separa_elite
-  seleccion
-  reproduccion
-  mutacion
-  #incluye_elite
-  evaluacion_poblacion
-end
-
-#ap tablero
-#ap tablero_flat
-
-
+puts ""
+puts "Mejor adaptacion final: #{record}"
+ganador.representar
 
