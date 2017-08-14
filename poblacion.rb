@@ -11,7 +11,7 @@ class Casilla
   end
 end
 
-class Gen
+class Genotipo
   def initialize(params = {})
     if params.has_key? :vector_casillas
       @vector_casillas = []
@@ -27,13 +27,13 @@ class Gen
       @vector_casillas = []
       9.times do |i|
         if i < PUNTO_DE_CRUCE
-          @vector_casillas << Casilla.new(params[:papa].show_casilla(i).valor, params[:papa].show_casilla(i).fija)
+          @vector_casillas << Casilla.new(params[:papa][i].valor, params[:papa][i].fija)
         else
-          @vector_casillas << Casilla.new(params[:mama].show_casilla(i).valor, params[:mama].show_casilla(i).fija)
+          @vector_casillas << Casilla.new(params[:mama][i].valor, params[:mama][i].fija)
         end
       end
     else
-      raise ErrorCrearGen
+      raise ErrorCrearGenotipo
     end
   end
 
@@ -71,6 +71,11 @@ class Gen
     return @vector_casillas[i]
   end
 
+
+  def [](i)
+    return @vector_casillas[i]
+  end
+
 end
 
 class Individuo
@@ -78,18 +83,18 @@ class Individuo
     if params.has_key? :genes
       @genes = []
       params[:genes].each do |gen|
-        if gen.class == Gen
+        if gen.class == Genotipo
           @genes << gen
         elsif gen.class == Array
-          @genes << Gen.new({ vector_casillas: gen})
+          @genes << Genotipo.new({ vector_casillas: gen})
         else
-          raise ErrorCrearGen
+          raise ErrorCrearGenotipo
         end
       end
     elsif (params.has_key?(:papa) && params.has_key?(:mama))
       @genes = []
       9.times do |i|
-        @genes << Gen.new({papa: params[:papa][i], mama: params[:mama][i]})
+        @genes << Genotipo.new({papa: params[:papa][i], mama: params[:mama][i]})
       end
     else
       raise GenesInvalidos
@@ -126,7 +131,7 @@ class Individuo
       end
       i = 0
       cambios.shuffle.each do |n|
-        while gen.show_casilla(i).fija do
+        while gen[i].fija do
           i += 1
         end
         gen.set_value(n, i)
@@ -149,13 +154,13 @@ class Individuo
       k2 = true
       until k1==false
         i1 = rand(0..8)
-        k1 = @genes[cromosoma].show_casilla(i1).fija
-        v1 = @genes[cromosoma].show_casilla(i1).valor
+        k1 = @genes[cromosoma][i1].fija
+        v1 = @genes[cromosoma][i1].valor
       end
       until k2==false
         i2 = rand(0..8)
-        k2 = @genes[cromosoma].show_casilla(i2).fija
-        v2 = @genes[cromosoma].show_casilla(i2).valor
+        k2 = @genes[cromosoma][i2].fija
+        v2 = @genes[cromosoma][i2].valor
       end
       @genes[cromosoma].set_value(v1, i2)
       @genes[cromosoma].set_value(v2, i1)
@@ -194,7 +199,7 @@ class Individuo
     ]
     9.times do |i|
       9.times do |j|
-        valor_casilla = @genes[j].show_casilla(i).valor
+        valor_casilla = @genes[j][i].valor
 
         rsColumna[i] -= valor_casilla
         rpColumna[i] = rpColumna[i] * valor_casilla
@@ -287,9 +292,9 @@ if __FILE__ == $0
   @cas_3 = Casilla.new(4, true)
   ap @cas_3
 
-  @gen_1 = Gen.new({ vector_casillas: [@cas_1, @cas_2, @cas_3]})
-  @gen_2 = Gen.new({ vector_casillas: [@cas_3, @cas_2, @cas_1]})
-  @gen_3 = Gen.new({ vector_casillas: [@cas_2, @cas_3, @cas_1]})
+  @gen_1 = Genotipo.new({ vector_casillas: [@cas_1, @cas_2, @cas_3]})
+  @gen_2 = Genotipo.new({ vector_casillas: [@cas_3, @cas_2, @cas_1]})
+  @gen_3 = Genotipo.new({ vector_casillas: [@cas_2, @cas_3, @cas_1]})
 
 
   puts "Genes"
