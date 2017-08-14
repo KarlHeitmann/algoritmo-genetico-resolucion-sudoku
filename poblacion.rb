@@ -154,34 +154,43 @@ class Individuo
           if (j < 3)
             rsCuad[0] = rsCuad[0] - valor_casilla
             rpCuad[0] = rpCuad[0] * valor_casilla
+            reaCuad[0].delete_at(reaCuad[0].index(valor_casilla)) unless reaCuad[0].index(valor_casilla).nil?
           elsif (j < 6)
             rsCuad[1] = rsCuad[1] - valor_casilla
             rpCuad[1] = rpCuad[1] * valor_casilla
+            reaCuad[1].delete_at(reaCuad[1].index(valor_casilla)) unless reaCuad[1].index(valor_casilla).nil?
           elsif (j < 9)
             rsCuad[2] = rsCuad[2] - valor_casilla
             rpCuad[2] = rpCuad[2] * valor_casilla
+            reaCuad[2].delete_at(reaCuad[2].index(valor_casilla)) unless reaCuad[2].index(valor_casilla).nil?
           end
         elsif (i < 6)
           if (j < 3)
             rsCuad[3] = rsCuad[3] - valor_casilla
             rpCuad[3] = rpCuad[3] * valor_casilla
+            reaCuad[3].delete_at(reaCuad[3].index(valor_casilla)) unless reaCuad[3].index(valor_casilla).nil?
           elsif (j < 6)
             rsCuad[4] = rsCuad[4] - valor_casilla
             rpCuad[4] = rpCuad[4] * valor_casilla
+            reaCuad[4].delete_at(reaCuad[4].index(valor_casilla)) unless reaCuad[4].index(valor_casilla).nil?
           elsif (j < 9)
             rsCuad[5] = rsCuad[5] - valor_casilla
             rpCuad[5] = rpCuad[5] * valor_casilla
+            reaCuad[5].delete_at(reaCuad[5].index(valor_casilla)) unless reaCuad[5].index(valor_casilla).nil?
           end
         elsif (i < 9)
           if (j < 3)
             rsCuad[6] = rsCuad[6] - valor_casilla
             rpCuad[6] = rpCuad[6] * valor_casilla
+            reaCuad[6].delete_at(reaCuad[6].index(valor_casilla)) unless reaCuad[6].index(valor_casilla).nil?
           elsif (j < 6)
             rsCuad[7] = rsCuad[7] - valor_casilla
             rpCuad[7] = rpCuad[7] * valor_casilla
+            reaCuad[7].delete_at(reaCuad[7].index(valor_casilla)) unless reaCuad[7].index(valor_casilla).nil?
           elsif (j < 9)
             rsCuad[8] = rsCuad[8] - valor_casilla
             rpCuad[8] = rpCuad[8] * valor_casilla
+            reaCuad[8].delete_at(reaCuad[8].index(valor_casilla)) unless reaCuad[8].index(valor_casilla).nil?
           end
         end
 
@@ -193,12 +202,15 @@ class Individuo
       rsCuad[i] = rsCuad[i].abs
       rpCuad[i] = (362880 - rpCuad[i]).abs
     end
+=begin
     ap rsColumna
     ap rsCuad
     ap [ 362880 ]
     ap rpColumna
     ap rpCuad
-    ap reaColumna
+=end
+    #ap reaColumna
+    ap reaCuad
     ap ""
   end
 end
