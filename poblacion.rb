@@ -1,6 +1,7 @@
 require 'awesome_print'
 
 PUNTO_DE_CRUCE = 4
+PROBABILIDAD_MUTACION = 0.8
 
 class Casilla
   attr_accessor :valor, :fija
@@ -136,6 +137,30 @@ class Individuo
 
   def get_genotipo
     return @genes
+  end
+
+  def mutar
+    if rand < PROBABILIDAD_MUTACION
+      #TODO al tirar los dados, el algoritmo no se fija si el segundo dado tiene
+      #el mismo valor del primer dado. En ese caso cambia el numero por uno en
+      #la misma posicion, lo que significa que no hay mutacion
+      cromosoma = rand(0..8)
+      k1 = true
+      k2 = true
+      until k1==false
+        i1 = rand(0..8)
+        k1 = @genes[cromosoma].show_casilla(i1).fija
+        v1 = @genes[cromosoma].show_casilla(i1).valor
+      end
+      until k2==false
+        i2 = rand(0..8)
+        k2 = @genes[cromosoma].show_casilla(i2).fija
+        v2 = @genes[cromosoma].show_casilla(i2).valor
+      end
+      @genes[cromosoma].set_value(v1, i2)
+      @genes[cromosoma].set_value(v2, i1)
+      #ap "mutacion cromosoma #{cromosoma}, posicion (#{i1}, #{i2})"
+    end
   end
 
   def calcular_adaptacion_ponderada

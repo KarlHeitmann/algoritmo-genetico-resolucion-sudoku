@@ -29,6 +29,10 @@ def cruzar(papa, mama)
   return Individuo.new({ papa: genes_papa, mama: genes_mama})
 end
 
+
+def mutacion
+end
+
 individuos =  []
 POBLACION.times do |i|
   genes = []
@@ -61,6 +65,10 @@ hijo = cruzar(individuos[0], individuos[1])
 hijo.representar
 ap " hijo #{0}: #{hijo.calcular_adaptacion_ponderada}"
 
+hijo.mutar
+hijo.representar
+ap " hijo #{0}: #{hijo.calcular_adaptacion_ponderada}"
+
 
 
 def evaluacion_poblacion
@@ -71,10 +79,6 @@ end
 
 def reproduccion
 end
-
-def mutacion
-end
-
 
 MAX_GEN.times do |i|
   #separa_elite
