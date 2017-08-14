@@ -85,6 +85,7 @@ class Cromosoma
     @genes[_i] = Casilla.new(_val, false) unless @genes[_i].fija
   end
 
+  # TODO deprecated, se usa el metodo sobrecargado [] para esta funcion
   def show_casilla(i)
     return @genes[i]
   end
@@ -284,9 +285,9 @@ class Individuo
     rs = rsCuad.inject(:+) + rsColumna.inject(:+)
     rp = rpCuad.inject(:+) + rpColumna.inject(:+)
 
+    # Segun el libro, los parametros de la siguiente formula son los mejores
+    # segun numerosos experimentos...
     @adaptacion = ((5*rs) + rp + (20*rea)).to_f
-    #@adaptacion = (@adaptacion / 100000).to_i
-    #ap @adaptacion
     return @adaptacion
   end
 
