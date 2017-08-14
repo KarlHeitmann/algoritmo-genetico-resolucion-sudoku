@@ -14,22 +14,22 @@ end
 class Cromosoma
   def initialize(params = {})
     if params.has_key? :vector_casillas
-      @vector_casillas = []
+      @genes = []
       params[:vector_casillas].each do |casilla|
         if casilla.class == Casilla
-          @vector_casillas << casilla
+          @genes << casilla
         else
           raise ErrorCrearCasilla
         end
-        #@vector_casillas << Casilla.new(casilla.valor, casilla.fija)
+        #@genes << Casilla.new(casilla.valor, casilla.fija)
       end
     elsif (params.has_key?(:papa) && params.has_key?(:mama))
-      @vector_casillas = []
+      @genes = []
       9.times do |i|
         if i < PUNTO_DE_CRUCE
-          @vector_casillas << Casilla.new(params[:papa][i].valor, params[:papa][i].fija)
+          @genes << Casilla.new(params[:papa][i].valor, params[:papa][i].fija)
         else
-          @vector_casillas << Casilla.new(params[:mama][i].valor, params[:mama][i].fija)
+          @genes << Casilla.new(params[:mama][i].valor, params[:mama][i].fija)
         end
       end
     else
@@ -40,7 +40,7 @@ class Cromosoma
   def representar
     i=1
     fila="| "
-    @vector_casillas.each do |c|
+    @genes.each do |c|
       if (i%3) == 0
         fila += c.valor.to_s + " | "
       else
@@ -54,7 +54,7 @@ class Cromosoma
   def find_fixed_nums
     results = []
     i = 0
-    @vector_casillas.each do |c|
+    @genes.each do |c|
       if c.fija
         results << {valor: c.valor, indice: i}
       end
@@ -64,16 +64,16 @@ class Cromosoma
   end
 
   def set_value(_val, _i)
-    @vector_casillas[_i] = Casilla.new(_val, false) unless @vector_casillas[_i].fija
+    @genes[_i] = Casilla.new(_val, false) unless @genes[_i].fija
   end
 
   def show_casilla(i)
-    return @vector_casillas[i]
+    return @genes[i]
   end
 
 
   def [](i)
-    return @vector_casillas[i]
+    return @genes[i]
   end
 
 end
