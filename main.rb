@@ -45,7 +45,7 @@ POBLACION.times do |i|
         casillas << Casilla.new(e, true)
       end
     end
-    genes << Gen.new({ vector_casillas: casillas })
+    genes << Cromosoma.new({ vector_casillas: casillas })
   end
   individuos << Individuo.new({genes: genes})
 end
